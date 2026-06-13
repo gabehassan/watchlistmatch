@@ -1,0 +1,23 @@
+# Watchlist Match
+
+> Watchlist Match is a free web tool that helps people figure out what to watch
+> together. Enter two or more Letterboxd usernames and it compares the public
+> watchlists, shows only the films on every list (the overlap, also called a
+> watchlist blend), and sorts them by Letterboxd average rating with the genres
+> shown for each film.
+
+Watchlist Match is also known as a Letterboxd watchlist blend or watchlist
+picker. It works with any number of usernames or profile links, only reads
+public watchlists, stores nothing, and is not affiliated with Letterboxd.
+
+## Links
+
+- [Watchlist Match](https://www.watchlistmatch.com/): open the tool and compare watchlists
+- [Letterboxd](https://letterboxd.com/): the film-logging site whose public watchlists are compared
+
+## Details
+
+- [How it works](https://www.watchlistmatch.com/): enter usernames, see the shared films sorted by rating
+- Sorts shared films by Letterboxd member average rating
+- Shows the release year and genres for each matched film
+- Only public watchlists can be read; private profiles return an error

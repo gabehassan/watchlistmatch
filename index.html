@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Letterboxd Watchlist Picker & Blend: What to Watch Together · Watchlist Match</title>
+<meta name="description" content="Figure out what to watch together. Compare two or more Letterboxd watchlists and instantly see the overlap, every film you all want to watch, sorted by rating. Free watchlist blend and picker for movie night." />
+<link rel="canonical" href="https://www.watchlistmatch.com/" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314181c'/%3E%3Cg style='isolation:isolate'%3E%3Ccircle cx='20' cy='32' r='13' fill='%23ff5c8a' style='mix-blend-mode:screen'/%3E%3Ccircle cx='32' cy='32' r='13' fill='%23b07cf7' style='mix-blend-mode:screen'/%3E%3Ccircle cx='44' cy='32' r='13' fill='%234f9cf9' style='mix-blend-mode:screen'/%3E%3C/g%3E%3C/svg%3E" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<meta name="theme-color" content="#14181c" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="Watchlist Match" />
+<meta property="og:title" content="Watchlist Match: What to Watch Together" />
+<meta property="og:description" content="Compare two or more Letterboxd watchlists and see the overlap, every film you all want to watch, sorted by rating." />
+<meta property="og:url" content="https://www.watchlistmatch.com/" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Watchlist Match" />
+<meta property="og:image" content="https://www.watchlistmatch.com/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Watchlist Match: What to Watch Together" />
+<meta name="twitter:description" content="Find the films on everyone's Letterboxd watchlist, sorted by rating." />
+<meta name="twitter:image" content="https://www.watchlistmatch.com/og.png" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Watchlist Match",
+  "alternateName": ["Letterboxd Watchlist Blend", "Letterboxd Watchlist Picker"],
+  "url": "https://www.watchlistmatch.com/",
+  "applicationCategory": "EntertainmentApplication",
+  "operatingSystem": "Any",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "description": "Figure out what to watch together: compare two or more Letterboxd watchlists and see the overlap, every film you all want to watch, sorted by Letterboxd average rating."
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Watchlist Match",
+  "url": "https://www.watchlistmatch.com/",
+  "alternateName": ["Letterboxd Watchlist Blend", "Letterboxd Watchlist Picker"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a Letterboxd watchlist blend?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A watchlist blend compares two or more Letterboxd watchlists and keeps only the overlap, the films that appear on every list. Those are the movies you genuinely all want to watch. No more scrolling through hundreds of posters trying to find common ground."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do we decide what to watch together?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Movie night, date night, or a long-distance watch party: if you both use Letterboxd, your watchlists already hold the answer. Compare them here and the highest-rated films you share rise to the top, so deciding what to watch tonight takes about five seconds."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How is this different from a watchlist picker?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A watchlist picker pulls one random film from your lists. Watchlist Match shows the full overlap, sorted by Letterboxd average rating, so the best-loved films float to the top and you choose together."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does it work with private watchlists?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No, only public Letterboxd watchlists can be read. Profiles set to private will show an error. Nothing is stored: your usernames stay in your browser."
+      }
+    }
+  ]
+}
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
+<style>
+  :root {
+    --bg: #14181c;
+    --panel: #1b2228;
+    --panel-2: #242c34;
+    --text: #d8e0e8;
+    --muted: #99aabb;
+    --green: #00e054;
+    --pink: #ff5c8a;
+    --azure: #4f9cf9;
+    --violet: #b07cf7;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body {
+    background: radial-gradient(1100px 520px at 50% -120px, #1a2129, var(--bg)) fixed;
+    color: var(--text);
+    font-family: "Avenir Next", Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    min-height: 100vh;
+    padding: 64px 20px 80px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+
+  @keyframes pop {
+    0% { transform: scale(0); }
+    70% { transform: scale(1.18); }
+    100% { transform: scale(1); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(0.55); opacity: 0.35; }
+    50% { transform: scale(1); opacity: 1; }
+  }
+
+  .logo {
+    display: flex;
+    isolation: isolate; /* keep the colour blending inside the logo */
+    justify-content: center;
+    margin: 0 auto 22px;
+    width: fit-content;
+  }
+  .logo span {
+    border-radius: 50%;
+    display: block;
+    height: 34px;
+    mix-blend-mode: screen; /* overlaps glow like the real Letterboxd mark */
+    width: 34px;
+  }
+  .logo span + span { margin-left: -12px; }
+  .logo span:nth-child(1) {
+    animation: fromLeft 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s backwards;
+    background: var(--pink);
+  }
+  .logo span:nth-child(2) {
+    animation: pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+    background: var(--violet);
+  }
+  .logo span:nth-child(3) {
+    animation: fromRight 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s backwards;
+    background: var(--azure);
+  }
+  @keyframes fromLeft {
+    from { opacity: 0; transform: translateX(-52px); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes fromRight {
+    from { opacity: 0; transform: translateX(52px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  h1 {
+    animation: fadeUp 0.6s ease 0.25s backwards;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    text-align: center;
+  }
+  .tagline {
+    animation: fadeUp 0.6s ease 0.35s backwards;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 10px auto 36px;
+    max-width: 480px;
+    text-align: center;
+  }
+
+  form {
+    animation: fadeUp 0.6s ease 0.45s backwards;
+    align-items: stretch;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .chipbox {
+    align-items: center;
+    background: var(--panel);
+    border: 1px solid #2c3641;
+    border-radius: 6px;
+    cursor: text;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 520px;
+    min-width: min(340px, 100%);
+    padding: 7px 10px;
+    transition: border-color 0.15s ease;
+  }
+  .chipbox:focus-within { border-color: var(--green); }
+  .chip {
+    align-items: center;
+    animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: var(--panel-2);
+    border: 1px solid #36414d;
+    border-radius: 999px;
+    display: inline-flex;
+    font-size: 14px;
+    gap: 7px;
+    padding: 4px 6px 4px 11px;
+  }
+  .chip .x {
+    background: none;
+    border: none;
+    border-radius: 50%;
+    color: var(--muted);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 17px;
+    line-height: 1;
+    padding: 4px 9px;
+    margin: -4px -3px -4px -6px;
+    text-transform: none;
+  }
+  .chip .x:hover { color: #ff6e6e; background: none; filter: none; transform: none; }
+  #userInput {
+    background: none;
+    border: none;
+    color: var(--text);
+    flex: 1;
+    font-family: inherit;
+    font-size: 16px;
+    min-width: 150px;
+    outline: none;
+    padding: 6px 4px;
+  }
+  button {
+    background: var(--green);
+    border: none;
+    border-radius: 6px;
+    color: #14181c;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 12px 22px;
+    text-transform: uppercase;
+    transition: transform 0.12s ease, filter 0.12s ease;
+  }
+  button:hover { filter: brightness(1.12); transform: translateY(-1px); }
+  button:active { transform: translateY(0) scale(0.97); }
+  button:disabled { opacity: 0.5; cursor: wait; transform: none; }
+
+  .hint {
+    animation: fadeUp 0.6s ease 0.55s backwards;
+    color: #5c6b7a;
+    font-size: 13px;
+    margin-top: 12px;
+    text-align: center;
+  }
+
+  .status {
+    align-items: center;
+    color: var(--muted);
+    display: flex;
+    font-size: 15px;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 26px;
+    min-height: 22px;
+    text-align: center;
+  }
+  .status.error { color: #ff6e6e; }
+  .loader { display: inline-flex; gap: 5px; }
+  .loader i {
+    animation: pulse 1s ease-in-out infinite;
+    border-radius: 50%;
+    display: block;
+    height: 9px;
+    width: 9px;
+  }
+  .loader i:nth-child(1) { background: var(--pink); }
+  .loader i:nth-child(2) { background: var(--violet); animation-delay: 0.16s; }
+  .loader i:nth-child(3) { background: var(--azure); animation-delay: 0.32s; }
+
+  /* A little strip of film between the form and the results. */
+  .strip {
+    animation: fadeUp 0.5s ease backwards;
+    background:
+      radial-gradient(circle at 9px 50%, var(--bg) 2.6px, transparent 3.4px) 0 0 / 22px 100% repeat-x,
+      var(--panel-2);
+    border-radius: 4px;
+    height: 15px;
+    margin: 34px auto 26px;
+    max-width: 440px;
+    opacity: 0.85;
+  }
+
+  .summary {
+    animation: fadeUp 0.5s ease backwards;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+  }
+  .summary .n { color: var(--green); }
+  .sub {
+    animation: fadeUp 0.5s ease 0.08s backwards;
+    color: var(--muted);
+    font-size: 14px;
+    margin: 6px 0 28px;
+    text-align: center;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+  }
+  .film {
+    animation: fadeUp 0.5s ease backwards;
+    animation-delay: var(--d, 0s);
+    background: linear-gradient(160deg, var(--panel-2), var(--panel));
+    border: 1px solid #2c3641;
+    border-radius: 10px;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 96px;
+    padding: 14px;
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .film:hover { border-color: var(--green); transform: translateY(-3px); }
+  .film:active { transform: scale(0.98); }
+  .film .title { font-weight: 600; font-size: 15px; line-height: 1.35; }
+  .film .meta { display: flex; flex-direction: column; gap: 3px; margin-top: 10px; }
+  .film .year { color: var(--muted); font-size: 13px; }
+  .film .rate { color: var(--green); font-weight: 600; }
+  .film .genres { color: #5c6b7a; font-size: 12px; }
+
+  .about {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 88px auto 0;
+    max-width: 560px;
+  }
+  .about h2 {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 600;
+    margin: 26px 0 8px;
+  }
+  .footer {
+    color: #5c6b7a;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-top: 56px;
+    text-align: center;
+  }
+  .footer a {
+    color: var(--muted);
+    text-decoration: none;
+    border-bottom: 1px solid #2c3641;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .footer a:hover { color: var(--green); border-color: var(--green); }
+
+  @media (max-width: 560px) {
+    body { padding-top: 44px; }
+    form { flex-direction: column; align-items: stretch; }
+    .chipbox { max-width: none; }
+    button { width: 100%; }
+    .grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="logo"><span></span><span></span><span></span></div>
+  <h1>Watchlist Match</h1>
+  <p class="tagline">
+    Figure out what to watch together. Enter two or more Letterboxd usernames
+    to find the films on everyone's watchlist, sorted by average rating.
+  </p>
+
+  <form id="form">
+    <div class="chipbox" id="chipbox">
+      <input type="text" id="userInput" aria-label="Letterboxd usernames"
+        placeholder="add usernames…" autocomplete="off" autocapitalize="none"
+        autocorrect="off" spellcheck="false" enterkeyhint="go" />
+    </div>
+    <button type="submit" id="go">Submit</button>
+  </form>
+  <p class="hint">Press comma or enter to lock in each name, profile links work too.</p>
+
+  <p class="status" id="status" role="status"></p>
+  <div id="results"></div>
+
+  <section class="about">
+    <h2>What is a Letterboxd watchlist blend?</h2>
+    <p>
+      A watchlist blend compares two or more Letterboxd watchlists and keeps
+      only the overlap, the films that appear on every list. Those are the
+      movies you genuinely all want to watch. No more scrolling through
+      hundreds of posters trying to find common ground.
+    </p>
+    <h2>How do we decide what to watch together?</h2>
+    <p>
+      Movie night, date night, or a long-distance watch party: if you both use
+      Letterboxd, your watchlists already hold the answer. Compare them here
+      and the highest-rated films you share rise to the top, so deciding what
+      to watch tonight takes about five seconds.
+    </p>
+    <h2>How is this different from a watchlist picker?</h2>
+    <p>
+      A watchlist picker pulls one random film from your lists. Watchlist Match
+      shows the full overlap, sorted by Letterboxd average rating, so the
+      best-loved films float to the top and you choose together.
+    </p>
+    <h2>Does it work with private watchlists?</h2>
+    <p>
+      No, only public Letterboxd watchlists can be read. Profiles set to
+      private will show an error. Nothing is stored: your usernames stay in
+      your browser.
+    </p>
+  </section>
+
+  <p class="footer">
+    Built by <a href="https://gabehassan.com/" target="_blank" rel="noopener">Gabe Hassan</a><br />
+    Not affiliated with Letterboxd · ratings are Letterboxd member averages
+  </p>
+</main>
+
+<script>
+  const form = document.getElementById("form");
+  const chipbox = document.getElementById("chipbox");
+  const userInput = document.getElementById("userInput");
+  const statusEl = document.getElementById("status");
+  const resultsEl = document.getElementById("results");
+  const goBtn = document.getElementById("go");
+
+  const users = [];
+
+  // Accept a bare username, @username, or a pasted profile/watchlist URL.
+  function extractUsername(input) {
+    const trimmed = input.trim();
+    const urlMatch = trimmed.match(/letterboxd\.com\/([^\/\s?#]+)/i);
+    if (urlMatch) return urlMatch[1].toLowerCase();
+    return trimmed.replace(/^@/, "").split("/")[0].toLowerCase();
+  }
+
+  function addUser(raw) {
+    const u = extractUsername(raw);
+    if (!u || !/^[a-z0-9_]{1,30}$/.test(u) || users.includes(u)) return;
+    users.push(u);
+    renderChips();
+  }
+
+  function removeUser(u) {
+    const i = users.indexOf(u);
+    if (i !== -1) users.splice(i, 1);
+    renderChips();
+  }
+
+  function renderChips() {
+    chipbox.querySelectorAll(".chip").forEach((c) => c.remove());
+    for (const u of users) {
+      const chip = document.createElement("span");
+      chip.className = "chip";
+      const name = document.createElement("span");
+      name.textContent = u;
+      const x = document.createElement("button");
+      x.type = "button";
+      x.className = "x";
+      x.setAttribute("aria-label", `Remove ${u}`);
+      x.textContent = "×";
+      x.addEventListener("click", () => removeUser(u));
+      chip.append(name, x);
+      chipbox.insertBefore(chip, userInput);
+    }
+  }
+
+  chipbox.addEventListener("click", () => userInput.focus());
+
+  userInput.addEventListener("keydown", (e) => {
+    if (e.key === "," || e.key === "Enter") {
+      e.preventDefault();
+      if (userInput.value.trim()) {
+        addUser(userInput.value);
+        userInput.value = "";
+      } else if (e.key === "Enter" && users.length >= 2) {
+        runSearch();
+      }
+    } else if (e.key === "Backspace" && !userInput.value && users.length) {
+      removeUser(users[users.length - 1]);
+    }
+  });
+
+  // Swipe typing and dictation on phones insert commas without key events.
+  userInput.addEventListener("input", () => {
+    if (userInput.value.includes(",")) {
+      const parts = userInput.value.split(",");
+      userInput.value = parts.pop();
+      parts.forEach(addUser);
+    }
+  });
+
+  // Pasting "pop01, jay matthew" locks them all in at once.
+  userInput.addEventListener("paste", (e) => {
+    const text = (e.clipboardData || window.clipboardData).getData("text");
+    if (/[,\s]/.test(text.trim())) {
+      e.preventDefault();
+      text.split(/[,\s]+/).forEach(addUser);
+    }
+  });
+
+  userInput.addEventListener("blur", () => {
+    if (userInput.value.trim()) {
+      addUser(userInput.value);
+      userInput.value = "";
+    }
+  });
+
+  function setStatus(text, { loading = false, error = false } = {}) {
+    statusEl.classList.toggle("error", error);
+    statusEl.innerHTML = loading
+      ? `<span class="loader"><i></i><i></i><i></i></span> ${escapeHtml(text)}`
+      : escapeHtml(text);
+  }
+
+  // Cache results in this browser's localStorage so repeat searches are free:
+  // watchlists for an hour; ratings for 90 days, or 7 days for films released
+  // this year (new releases' ratings still move around).
+  const DAY = 24 * 60 * 60 * 1000;
+  const WATCHLIST_TTL = 60 * 60 * 1000;
+  const RATING_TTL_OLD = 90 * DAY;
+  const RATING_TTL_NEW = 7 * DAY;
+  const THIS_YEAR = new Date().getFullYear();
+
+  function isNewRelease(film) {
+    const m = film.name.match(/\((\d{4})\)$/);
+    return m ? Number(m[1]) >= THIS_YEAR : false;
+  }
+
+  function cacheGet(key, ttl) {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return undefined;
+      const { t, v } = JSON.parse(raw);
+      if (Date.now() - t > ttl) {
+        localStorage.removeItem(key);
+        return undefined;
+      }
+      return v;
+    } catch {
+      return undefined;
+    }
+  }
+  function cacheSet(key, v) {
+    try {
+      localStorage.setItem(key, JSON.stringify({ t: Date.now(), v }));
+    } catch {}
+  }
+
+  // The API wants a short-lived pass from /api/token with every request.
+  // Getting one means solving a small proof-of-work puzzle: find a nonce where
+  // sha256(challenge.nonce) starts with enough zero bits. Takes a fraction of
+  // a second once per 15 minutes, but makes mass token farming expensive.
+  function leadingZeroBits(bytes) {
+    let bits = 0;
+    for (const b of bytes) {
+      if (b === 0) { bits += 8; continue; }
+      bits += Math.clz32(b) - 24;
+      break;
+    }
+    return bits;
+  }
+
+  async function solveChallenge(challenge, difficulty) {
+    const encoder = new TextEncoder();
+    const BATCH = 128; // hash in parallel batches; the per-call overhead dominates
+    for (let start = 0; ; start += BATCH) {
+      const digests = await Promise.all(
+        Array.from({ length: BATCH }, (_, i) =>
+          crypto.subtle.digest("SHA-256", encoder.encode(`${challenge}.${start + i}`))
+        )
+      );
+      for (let i = 0; i < BATCH; i++) {
+        if (leadingZeroBits(new Uint8Array(digests[i])) >= difficulty) return start + i;
+      }
+    }
+  }
+
+  let pass = { token: null, exp: 0 };
+  async function getToken() {
+    if (pass.token && Date.now() < pass.exp) return pass.token;
+    const chRes = await fetch("/api/token");
+    if (!chRes.ok) throw new Error("Couldn't start a session. Refresh and try again.");
+    const { challenge, difficulty } = await chRes.json();
+    const nonce = await solveChallenge(challenge, difficulty);
+    const res = await fetch(
+      `/api/token?challenge=${encodeURIComponent(challenge)}&nonce=${nonce}`
+    );
+    if (!res.ok) throw new Error("Couldn't start a session. Refresh and try again.");
+    const { token, ttl } = await res.json();
+    pass = { token, exp: Date.now() + ttl - 30000 };
+    return token;
+  }
+
+  async function apiFetch(path) {
+    let res = await fetch(path, { headers: { "x-wm-token": await getToken() } });
+    if (res.status === 401) {
+      pass = { token: null, exp: 0 }; // token expired mid-session, fetch a new one
+      res = await fetch(path, { headers: { "x-wm-token": await getToken() } });
+    }
+    return res;
+  }
+
+  async function getWatchlist(user) {
+    const cached = cacheGet(`wl:${user}`, WATCHLIST_TTL);
+    if (cached) return cached;
+    const res = await apiFetch(`/api/watchlist?user=${encodeURIComponent(user)}`);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || `Couldn't load ${user}'s watchlist.`);
+    cacheSet(`wl:${user}`, data);
+    return data;
+  }
+
+  // Look up each matched film's average rating and genres, 60 per request.
+  // Films we've seen before come from localStorage; only new ones hit the API.
+  // Current-year releases go in a separate request so the server can give them
+  // a shorter CDN cache.
+  async function getRatings(films) {
+    const ratings = {};
+    const missing = [];
+    for (const f of films) {
+      const ttl = isNewRelease(f) ? RATING_TTL_NEW : RATING_TTL_OLD;
+      const r = cacheGet(`rt2:${f.slug}`, ttl);
+      if (r !== undefined) ratings[f.slug] = r;
+      else missing.push(f);
+    }
+    const requests = [];
+    for (const fresh of [false, true]) {
+      const group = missing.filter((f) => isNewRelease(f) === fresh).map((f) => f.slug);
+      for (let i = 0; i < group.length; i += 60) {
+        const slugs = group.slice(i, i + 60).join(",");
+        requests.push(
+          apiFetch(`/api/ratings?slugs=${slugs}${fresh ? "&fresh=1" : ""}`).then((r) =>
+            r.ok ? r.json() : {}
+          )
+        );
+      }
+    }
+    for (const r of await Promise.all(requests)) Object.assign(ratings, r);
+    for (const f of missing) cacheSet(`rt2:${f.slug}`, ratings[f.slug] ?? null); // null = no data
+    return ratings;
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+    );
+  }
+
+  function animateCount(el, n) {
+    const start = performance.now();
+    const duration = 700;
+    function tick(now) {
+      const p = Math.min((now - start) / duration, 1);
+      el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3)));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  function render(matches, lists, { countUp = false } = {}) {
+    const counts = lists.map((l) => `${l.user}: ${l.films.length}`).join(" · ");
+    if (matches.length === 0) {
+      resultsEl.innerHTML = `
+        <div class="strip"></div>
+        <p class="summary">No matches 🎬</p>
+        <p class="sub">${escapeHtml(counts)}, no films on every list.</p>`;
+      return;
+    }
+    const cards = matches
+      .map((f, i) => {
+        const m = f.name.match(/^(.*)\s\((\d{4})\)$/);
+        const title = escapeHtml(m ? m[1] : f.name);
+        const year = m ? m[2] : "";
+        const stars =
+          f.rating != null ? `<span class="rate"> · ★ ${f.rating.toFixed(2)}</span>` : "";
+        const genres = f.genres && f.genres.length
+          ? `<span class="genres">${escapeHtml(f.genres.join(" · "))}</span>`
+          : "";
+        return `<a class="film" style="--d:${Math.min(i, 24) * 0.03}s"
+          href="https://letterboxd.com/film/${f.slug}/" target="_blank" rel="noopener">
+          <span class="title">${title}</span>
+          <span class="meta"><span class="year">${year}${stars}</span>${genres}</span>
+        </a>`;
+      })
+      .join("");
+    resultsEl.innerHTML = `
+      <div class="strip"></div>
+      <p class="summary"><span class="n" id="count">${matches.length}</span> film${matches.length === 1 ? "" : "s"} on ${lists.length > 2 ? "all" : "both"} watchlists</p>
+      <p class="sub">${escapeHtml(counts)}</p>
+      <div class="grid">${cards}</div>`;
+    if (countUp) animateCount(document.getElementById("count"), matches.length);
+  }
+
+  // Solve the puzzle while the user is still typing, so the first search
+  // doesn't wait on it.
+  getToken().catch(() => {});
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    runSearch();
+  });
+
+  async function runSearch() {
+    if (userInput.value.trim()) {
+      addUser(userInput.value);
+      userInput.value = "";
+    }
+    if (users.length < 2) {
+      setStatus("Add at least two usernames to compare.", { error: true });
+      return;
+    }
+
+    resultsEl.innerHTML = "";
+    setStatus(`Reading ${users.length} watchlists…`, { loading: true });
+    goBtn.disabled = true;
+
+    try {
+      const lists = await Promise.all(users.map(getWatchlist));
+      let matches = lists[0].films;
+      for (const list of lists.slice(1)) {
+        const slugs = new Set(list.films.map((f) => f.slug));
+        matches = matches.filter((f) => slugs.has(f.slug));
+      }
+      matches = [...matches].sort((x, y) => x.name.localeCompare(y.name));
+
+      // Show the matches right away, then re-sort once ratings arrive.
+      setStatus(matches.length ? "Fetching ratings…" : "", { loading: matches.length > 0 });
+      render(matches, lists, { countUp: true });
+
+      if (matches.length) {
+        const meta = await getRatings(matches);
+        for (const f of matches) {
+          const m = meta[f.slug];
+          f.rating = m && m.r != null ? m.r : null;
+          f.genres = (m && m.g) || [];
+        }
+        matches.sort(
+          (x, y) => (y.rating ?? -1) - (x.rating ?? -1) || x.name.localeCompare(y.name)
+        );
+        setStatus("");
+        render(matches, lists);
+      }
+    } catch (err) {
+      setStatus(err.message, { error: true });
+    } finally {
+      goBtn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
