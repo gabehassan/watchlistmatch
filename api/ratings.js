@@ -2,7 +2,7 @@
 // letterboxd blocks the json endpoint, so parse the rating out of the page head
 
 import { overLimit, jitter, requireGet } from "./_lib/ratelimit.js";
-import { checkOrigin, verifyToken } from "./_lib/auth.js";
+import { checkOrigin, verifyTokenQuota } from "./_lib/auth.js";
 
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
@@ -53,7 +53,7 @@ async function fetchFilmMeta(slug) {
 
 export default async function handler(req, res) {
   if (!requireGet(req, res)) return;
-  if (!checkOrigin(req) || !verifyToken(req)) {
+  if (!checkOrigin(req) || !verifyTokenQuota(req, { scope: "ratings", limit: 12 })) {
     res.status(401).json({ error: "Unauthorized." });
     return;
   }
@@ -71,7 +71,7 @@ export default async function handler(req, res) {
   }
 
   // over the limit: return empty, not a 429
-  if (overLimit(req, { limit: 20 })) {
+  if (overLimit(req, { limit: 20, scope: "ratings" })) {
     await jitter();
     res.setHeader("Cache-Control", "private, no-store");
     res.status(200).json({});

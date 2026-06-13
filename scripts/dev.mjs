@@ -58,6 +58,12 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
+  if (url.pathname === "/_vercel/speed-insights/script.js") {
+    res.setHeader("Content-Type", "text/javascript; charset=utf-8");
+    res.end("window.si = window.si || function () {};");
+    return;
+  }
+
   const pathname = url.pathname === "/" ? "/index.html" : url.pathname;
   const filePath = normalize(join(root.pathname, pathname));
   if (!filePath.startsWith(root.pathname)) {

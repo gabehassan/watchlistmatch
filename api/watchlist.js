@@ -1,7 +1,7 @@
 // GET /api/watchlist?user=<username>
 
 import { overLimit, jitter, requireGet } from "./_lib/ratelimit.js";
-import { checkOrigin, verifyToken } from "./_lib/auth.js";
+import { checkOrigin, verifyTokenQuota } from "./_lib/auth.js";
 
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36";
@@ -82,7 +82,7 @@ export async function getWatchlist(user) {
 
 export default async function handler(req, res) {
   if (!requireGet(req, res)) return;
-  if (!checkOrigin(req) || !verifyToken(req)) {
+  if (!checkOrigin(req) || !verifyTokenQuota(req, { scope: "watchlist", limit: 16 })) {
     res.status(401).json({ error: "Unauthorized." });
     return;
   }
@@ -94,7 +94,7 @@ export default async function handler(req, res) {
   }
 
   // over the limit: hand back an empty list, not a 429
-  if (overLimit(req, { limit: 40 })) {
+  if (overLimit(req, { limit: 40, scope: "watchlist" })) {
     await jitter();
     res.setHeader("Cache-Control", "private, no-store");
     res.status(200).json({ user: raw, count: 0, films: [] });

@@ -4,14 +4,15 @@ import { clientIp } from "./auth.js";
 
 const hits = new Map();
 
-export function overLimit(req, { limit, windowMs = 60_000 }) {
+export function overLimit(req, { limit, windowMs = 60_000, scope = "global" }) {
   const ip = clientIp(req);
+  const bucket = `${scope}:${ip}`;
   const now = Date.now();
-  const recent = (hits.get(ip) || []).filter((t) => now - t < windowMs);
+  const recent = (hits.get(bucket) || []).filter((t) => now - t < windowMs);
 
   const over = recent.length >= limit;
   if (!over) recent.push(now);
-  hits.set(ip, recent);
+  hits.set(bucket, recent);
 
   if (hits.size > 5000) {
     for (const [key, times] of hits) {

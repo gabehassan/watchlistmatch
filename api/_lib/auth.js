@@ -18,13 +18,18 @@ export function clientIp(req) {
   return (req.headers["x-forwarded-for"] || "").split(",")[0].trim() || "unknown";
 }
 
-function sign(ip, exp) {
+function sign(ip, exp, nonce = "") {
+  return crypto.createHmac("sha256", SECRET).update(`${ip}|${exp}|${nonce}`).digest("hex");
+}
+
+function legacySign(ip, exp) {
   return crypto.createHmac("sha256", SECRET).update(`${ip}|${exp}`).digest("hex");
 }
 
 export function mintToken(ip) {
   const exp = Date.now() + TOKEN_TTL;
-  return `${exp}.${sign(ip, exp)}`;
+  const nonce = crypto.randomBytes(9).toString("base64url");
+  return `${exp}.${nonce}.${sign(ip, exp, nonce)}`;
 }
 
 // find a nonce where sha256(challenge.nonce) has DIFFICULTY leading zero bits
@@ -74,10 +79,13 @@ export function verifyChallenge(req, challenge, nonce) {
 
 export function verifyToken(req) {
   try {
-    const [expStr, sig] = String(req.headers["x-wm-token"] || "").split(".");
+    const token = String(req.headers["x-wm-token"] || "");
+    const parts = token.split(".");
+    const [expStr, nonce, sig] =
+      parts.length === 3 ? parts : [parts[0], "", parts[1]];
     const exp = Number(expStr);
     if (!exp || !sig || Date.now() > exp) return false;
-    const expected = sign(clientIp(req), exp);
+    const expected = nonce ? sign(clientIp(req), exp, nonce) : legacySign(clientIp(req), exp);
     return (
       sig.length === expected.length &&
       crypto.timingSafeEqual(Buffer.from(sig), Buffer.from(expected))
@@ -85,6 +93,32 @@ export function verifyToken(req) {
   } catch {
     return false;
   }
+}
+
+const tokenUses = new Map();
+
+function consumeToken(req, { scope, limit }) {
+  const token = String(req.headers["x-wm-token"] || "");
+  const exp = Number(token.split(".")[0]);
+  if (!scope || !limit || !exp) return true;
+
+  const now = Date.now();
+  if (tokenUses.size > 10000) {
+    for (const [key, entry] of tokenUses) {
+      if (entry.exp <= now) tokenUses.delete(key);
+    }
+  }
+
+  const key = `${scope}:${clientIp(req)}:${token}`;
+  const entry = tokenUses.get(key) || { exp, count: 0 };
+  if (entry.count >= limit) return false;
+  entry.count += 1;
+  tokenUses.set(key, entry);
+  return true;
+}
+
+export function verifyTokenQuota(req, options) {
+  return verifyToken(req) && consumeToken(req, options);
 }
 
 export function checkOrigin(req) {

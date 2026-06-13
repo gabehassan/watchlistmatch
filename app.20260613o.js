@@ -1,11 +1,22 @@
 const form = document.getElementById("form");
 const chipbox = document.getElementById("chipbox");
 const userInput = document.getElementById("userInput");
+const turnstileEl = document.getElementById("turnstile-widget");
 const statusEl = document.getElementById("status");
 const resultsEl = document.getElementById("results");
 const goBtn = document.getElementById("go");
 
 const users = [];
+const MAX_USERS = 8;
+const TURNSTILE_SITE_KEY = "0x4AAAAAADjsPKC6CkKDJNLj";
+// onload is required: cloudflare calls it when render is ready
+const TURNSTILE_URL =
+  "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__wmTurnstileReady";
+
+window.__wmTurnstileReady = () => {
+  window.__wmTurnstileLoaded = true;
+  window.dispatchEvent(new Event("wm-turnstile-ready"));
+};
 
 // accepts username, @username, or a profile url
 function extractUsername(input) {
@@ -18,7 +29,12 @@ function extractUsername(input) {
 function addUser(raw) {
   const u = extractUsername(raw);
   if (!u || !/^[a-z0-9_]{1,30}$/.test(u) || users.includes(u)) return;
+  if (users.length >= MAX_USERS) {
+    setStatus(`Compare up to ${MAX_USERS} usernames at once.`, { error: true });
+    return;
+  }
   users.push(u);
+  setStatus("");
   renderChips();
 }
 
@@ -153,6 +169,110 @@ async function solveChallenge(challenge, difficulty) {
 
 let pass = { token: null, exp: 0 };
 let tokenPromise = null;
+let turnstileScriptPromise = null;
+let turnstileWidgetId = null;
+let turnstilePromise = null;
+let turnstileResolve = null;
+let turnstileReject = null;
+
+function isLocalDev() {
+  return location.hostname === "localhost" || location.hostname === "127.0.0.1";
+}
+
+function turnstileReady() {
+  return window.turnstile && typeof window.turnstile.render === "function";
+}
+
+function loadTurnstile() {
+  if (isLocalDev()) return Promise.resolve();
+  if (turnstileReady()) return Promise.resolve();
+  if (turnstileScriptPromise) return turnstileScriptPromise;
+
+  turnstileScriptPromise = new Promise((resolve, reject) => {
+    let settled = false;
+    const onReady = () => { if (turnstileReady()) finish(true); };
+    const finish = (ok) => {
+      if (settled) return;
+      settled = true;
+      window.removeEventListener("wm-turnstile-ready", onReady);
+      clearInterval(poll);
+      clearTimeout(timer);
+      ok ? resolve() : reject(new Error("turnstile-unavailable"));
+    };
+    window.addEventListener("wm-turnstile-ready", onReady);
+    const poll = setInterval(() => { if (turnstileReady()) finish(true); }, 150);
+    const timer = setTimeout(() => finish(false), 15000);
+
+    if (!document.querySelector("script[data-wm-turnstile]")) {
+      const script = document.createElement("script");
+      script.src = TURNSTILE_URL;
+      script.async = true;
+      script.setAttribute("data-wm-turnstile", "");
+      script.onerror = () => finish(false);
+      document.head.append(script);
+    }
+  });
+  return turnstileScriptPromise;
+}
+
+function turnstileAttempt(ms) {
+  return new Promise((resolve) => {
+    let done = false;
+    const finish = (val) => {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(val);
+    };
+    const timer = setTimeout(() => finish(null), ms);
+    turnstileResolve = (token) => finish(token);
+    turnstileReject = (code) => { console.warn("[turnstile]", code); finish(null); };
+
+    try {
+      if (turnstileWidgetId != null) {
+        window.turnstile.reset(turnstileWidgetId);
+      } else {
+        turnstileWidgetId = window.turnstile.render(turnstileEl, {
+          sitekey: TURNSTILE_SITE_KEY,
+          theme: "dark",
+          appearance: "interaction-only",
+          callback: (token) => turnstileResolve && turnstileResolve(token),
+          "error-callback": (code) => turnstileReject && turnstileReject(code || "error"),
+          "expired-callback": () => turnstileReject && turnstileReject("expired"),
+          "timeout-callback": () => turnstileReject && turnstileReject("timeout"),
+          "unsupported-callback": () => turnstileReject && turnstileReject("unsupported"),
+        });
+        if (turnstileWidgetId == null) finish(null);
+      }
+    } catch (err) {
+      console.warn("[turnstile]", err);
+      finish(null);
+    }
+  });
+}
+
+async function getTurnstileToken() {
+  if (isLocalDev()) return "local-dev";
+  if (turnstilePromise) return turnstilePromise;
+
+  turnstilePromise = (async () => {
+    await loadTurnstile();
+    if (!turnstileReady()) throw new Error("turnstile-unavailable");
+
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const token = await turnstileAttempt(30000);
+      if (token) return token;
+    }
+    throw new Error("turnstile-failed");
+  })();
+
+  try {
+    return await turnstilePromise;
+  } finally {
+    turnstilePromise = null;
+  }
+}
+
 async function getToken() {
   if (pass.token && Date.now() < pass.exp) return pass.token;
   if (tokenPromise) return tokenPromise;
@@ -162,8 +282,14 @@ async function getToken() {
     if (!chRes.ok) throw new Error("Couldn't start a session. Refresh and try again.");
     const { challenge, difficulty } = await chRes.json();
     const nonce = await solveChallenge(challenge, difficulty);
+    let turnstile;
+    try {
+      turnstile = await getTurnstileToken();
+    } catch {
+      throw new Error("Couldn't verify your browser. Refresh and try again.");
+    }
     const res = await fetch(
-      `/api/token?challenge=${encodeURIComponent(challenge)}&nonce=${nonce}`
+      `/api/token?challenge=${encodeURIComponent(challenge)}&nonce=${nonce}&turnstile=${encodeURIComponent(turnstile)}`
     );
     if (!res.ok) throw new Error("Couldn't start a session. Refresh and try again.");
     const { token, ttl } = await res.json();
@@ -297,10 +423,14 @@ async function runSearch() {
   }
 
   resultsEl.innerHTML = "";
-  setStatus(`Reading ${users.length} watchlists…`, { loading: true });
   goBtn.disabled = true;
 
   try {
+    if (!(pass.token && Date.now() < pass.exp)) {
+      setStatus("Checking your browser…", { loading: true });
+      await getToken();
+    }
+    setStatus(`Reading ${users.length} watchlists…`, { loading: true });
     const lists = await Promise.all(users.map(getWatchlist));
     let matches = lists[0].films;
     for (const list of lists.slice(1)) {
