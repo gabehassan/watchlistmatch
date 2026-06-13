@@ -1,6 +1,6 @@
 // GET /api/token -> challenge, or a signed pass if solved
 
-import { overLimit, jitter, requireGet } from "./_lib/ratelimit.js";
+import { overLimit, jitter, noStore, requireGet } from "./_lib/ratelimit.js";
 import {
   mintToken,
   mintChallenge,
@@ -13,7 +13,7 @@ import {
 
 async function verifyTurnstile(req, token) {
   const secret = process.env.TURNSTILE_SECRET_KEY;
-  if (!secret) return !process.env.VERCEL;
+  if (!secret || secret === '""' || secret === "''") return !process.env.VERCEL;
   if (!token) return false;
 
   try {
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
     return;
   }
 
-  res.setHeader("Cache-Control", "private, no-store");
+  noStore(res);
 
   const { challenge, nonce, turnstile } = req.query;
   const limited = overLimit(req, { limit: 14, scope: "token" });

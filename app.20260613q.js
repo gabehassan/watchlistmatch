@@ -12,6 +12,7 @@ const TURNSTILE_SITE_KEY = "0x4AAAAAADjsPKC6CkKDJNLj";
 // onload is required: cloudflare calls it when render is ready
 const TURNSTILE_URL =
   "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=__wmTurnstileReady";
+const API_ORIGIN = location.protocol === "file:" ? "http://localhost:3018" : "";
 
 window.__wmTurnstileReady = () => {
   window.__wmTurnstileLoaded = true;
@@ -44,6 +45,15 @@ function removeUser(u) {
   renderChips();
 }
 
+function editLastChipFromBackspace() {
+  const last = users.pop();
+  if (!last) return;
+  renderChips();
+  userInput.value = last.slice(0, -1);
+  userInput.focus();
+  userInput.setSelectionRange(userInput.value.length, userInput.value.length);
+}
+
 function renderChips() {
   chipbox.querySelectorAll(".chip").forEach((c) => c.remove());
   for (const u of users) {
@@ -74,7 +84,8 @@ userInput.addEventListener("keydown", (e) => {
       runSearch();
     }
   } else if (e.key === "Backspace" && !userInput.value && users.length) {
-    removeUser(users[users.length - 1]);
+    e.preventDefault();
+    editLastChipFromBackspace();
   }
 });
 
@@ -176,7 +187,11 @@ let turnstileResolve = null;
 let turnstileReject = null;
 
 function isLocalDev() {
-  return location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  return (
+    location.protocol === "file:" ||
+    location.hostname === "localhost" ||
+    location.hostname === "127.0.0.1"
+  );
 }
 
 function turnstileReady() {
@@ -278,7 +293,7 @@ async function getToken() {
   if (tokenPromise) return tokenPromise;
 
   tokenPromise = (async () => {
-    const chRes = await fetch("/api/token");
+    const chRes = await fetch(`${API_ORIGIN}/api/token`);
     if (!chRes.ok) throw new Error("Couldn't start a session. Refresh and try again.");
     const { challenge, difficulty } = await chRes.json();
     const nonce = await solveChallenge(challenge, difficulty);
@@ -289,7 +304,7 @@ async function getToken() {
       throw new Error("Couldn't verify your browser. Refresh and try again.");
     }
     const res = await fetch(
-      `/api/token?challenge=${encodeURIComponent(challenge)}&nonce=${nonce}&turnstile=${encodeURIComponent(turnstile)}`
+      `${API_ORIGIN}/api/token?challenge=${encodeURIComponent(challenge)}&nonce=${nonce}&turnstile=${encodeURIComponent(turnstile)}`
     );
     if (!res.ok) throw new Error("Couldn't start a session. Refresh and try again.");
     const { token, ttl } = await res.json();
@@ -305,10 +320,10 @@ async function getToken() {
 }
 
 async function apiFetch(path) {
-  let res = await fetch(path, { headers: { "x-wm-token": await getToken() } });
+  let res = await fetch(`${API_ORIGIN}${path}`, { headers: { "x-wm-token": await getToken() } });
   if (res.status === 401) {
     pass = { token: null, exp: 0 };
-    res = await fetch(path, { headers: { "x-wm-token": await getToken() } });
+    res = await fetch(`${API_ORIGIN}${path}`, { headers: { "x-wm-token": await getToken() } });
   }
   return res;
 }
@@ -391,7 +406,7 @@ function render(matches, lists, { countUp = false } = {}) {
         : "";
       const slug = safeSlug(f.slug);
       return `<a class="film" style="--d:${Math.min(i, 24) * 0.03}s"
-        href="https://letterboxd.com/film/${slug}/" target="_blank" rel="noopener">
+        href="https://letterboxd.com/film/${slug}/" target="_blank" rel="noopener noreferrer">
         <span class="title">${title}</span>
         <span class="meta"><span class="year">${year}${stars}</span>${genres}</span>
       </a>`;

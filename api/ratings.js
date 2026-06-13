@@ -1,7 +1,7 @@
 // GET /api/ratings?slugs=film-one,film-two
 // letterboxd blocks the json endpoint, so parse the rating out of the page head
 
-import { overLimit, jitter, requireGet } from "./_lib/ratelimit.js";
+import { overLimit, jitter, noStore, requireGet } from "./_lib/ratelimit.js";
 import { checkOrigin, verifyTokenQuota } from "./_lib/auth.js";
 
 const UA =
@@ -14,6 +14,7 @@ async function fetchFilmMeta(slug) {
   try {
     const res = await fetch(`https://letterboxd.com/film/${slug}/`, {
       headers: { "User-Agent": UA, Accept: "text/html" },
+      signal: AbortSignal.timeout(10_000),
     });
     if (!res.ok || !res.body) return null;
 
@@ -54,6 +55,7 @@ async function fetchFilmMeta(slug) {
 export default async function handler(req, res) {
   if (!requireGet(req, res)) return;
   if (!checkOrigin(req) || !verifyTokenQuota(req, { scope: "ratings", limit: 12 })) {
+    noStore(res);
     res.status(401).json({ error: "Unauthorized." });
     return;
   }
@@ -66,6 +68,7 @@ export default async function handler(req, res) {
     .slice(0, MAX_SLUGS);
 
   if (slugs.length === 0) {
+    noStore(res);
     res.status(400).json({ error: "No film slugs given." });
     return;
   }

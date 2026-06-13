@@ -38,6 +38,15 @@ const server = http.createServer(async (req, res) => {
   const handler = handlers[url.pathname];
 
   if (handler) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "x-wm-token, content-type");
+    if (req.method === "OPTIONS") {
+      res.statusCode = 204;
+      res.end();
+      return;
+    }
+
     req.query = Object.fromEntries(url.searchParams);
     res.status = (code) => ((res.statusCode = code), res);
     res.json = (obj) => {

@@ -26,8 +26,13 @@ export function jitter(min = 120, max = 480) {
   return new Promise((r) => setTimeout(r, min + Math.random() * (max - min)));
 }
 
+export function noStore(res) {
+  res.setHeader("Cache-Control", "private, no-store");
+}
+
 export function requireGet(req, res) {
   if (req.method !== "GET") {
+    noStore(res);
     res.setHeader("Allow", "GET");
     res.status(405).json({ error: "Method not allowed." });
     return false;

@@ -2,7 +2,16 @@
 
 import crypto from "node:crypto";
 
-const SECRET = process.env.WM_TOKEN_SECRET || "dev-only-secret";
+function configuredSecret(name, fallback) {
+  const value = process.env[name];
+  if (value && value !== '""' && value !== "''") return value;
+  if (process.env.VERCEL) {
+    throw new Error(`${name} is required in production.`);
+  }
+  return fallback;
+}
+
+const SECRET = configuredSecret("WM_TOKEN_SECRET", "dev-only-secret");
 export const TOKEN_TTL = 15 * 60 * 1000;
 
 const ALLOWED_HOSTS = new Set([
@@ -122,11 +131,16 @@ export function verifyTokenQuota(req, options) {
 }
 
 export function checkOrigin(req) {
-  const site = req.headers["sec-fetch-site"];
-  if (site && site !== "same-origin" && site !== "none") return false;
-
   const origin = req.headers.origin;
+  const isLocalFilePreview = origin === "null" && !process.env.VERCEL;
+
+  const site = req.headers["sec-fetch-site"];
+  if (site && site !== "same-origin" && site !== "none" && !isLocalFilePreview) {
+    return false;
+  }
+
   if (origin) {
+    if (isLocalFilePreview) return true;
     try {
       if (!ALLOWED_HOSTS.has(new URL(origin).hostname)) return false;
     } catch {

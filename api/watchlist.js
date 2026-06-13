@@ -1,6 +1,6 @@
 // GET /api/watchlist?user=<username>
 
-import { overLimit, jitter, requireGet } from "./_lib/ratelimit.js";
+import { overLimit, jitter, noStore, requireGet } from "./_lib/ratelimit.js";
 import { checkOrigin, verifyTokenQuota } from "./_lib/auth.js";
 
 const UA =
@@ -24,6 +24,7 @@ async function fetchPage(user, page) {
   const res = await fetch(url, {
     headers: { "User-Agent": UA, Accept: "text/html" },
     redirect: "follow",
+    signal: AbortSignal.timeout(12_000),
   });
   if (res.status === 404) {
     const err = new Error("not_found");
@@ -83,12 +84,14 @@ export async function getWatchlist(user) {
 export default async function handler(req, res) {
   if (!requireGet(req, res)) return;
   if (!checkOrigin(req) || !verifyTokenQuota(req, { scope: "watchlist", limit: 16 })) {
+    noStore(res);
     res.status(401).json({ error: "Unauthorized." });
     return;
   }
 
   const raw = (req.query.user || "").toString().trim().toLowerCase();
   if (!/^[a-z0-9_]{1,30}$/.test(raw)) {
+    noStore(res);
     res.status(400).json({ error: "That doesn't look like a Letterboxd username." });
     return;
   }
@@ -104,6 +107,7 @@ export default async function handler(req, res) {
   try {
     const data = await getWatchlist(raw);
     if (data.films.length === 0) {
+      noStore(res);
       res.status(404).json({
         error: `Couldn't read ${raw}'s watchlist, it may be empty or private.`,
       });
@@ -114,8 +118,10 @@ export default async function handler(req, res) {
     res.status(200).json({ user: raw, ...data });
   } catch (e) {
     if (e.code === 404) {
+      noStore(res);
       res.status(404).json({ error: `No Letterboxd user named "${raw}".` });
     } else {
+      noStore(res);
       res.status(502).json({
         error: "Letterboxd didn't respond properly. Try again in a minute.",
       });
