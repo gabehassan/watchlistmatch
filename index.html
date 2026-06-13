@@ -714,9 +714,10 @@
     if (countUp) animateCount(document.getElementById("count"), matches.length);
   }
 
-  // Solve the puzzle while the user is still typing, so the first search
-  // doesn't wait on it.
-  getToken().catch(() => {});
+  // Warm the token on first focus — the user is about to type a username, so the
+  // puzzle solves in the background and the first search is instant. Kept off
+  // page load so it never sits on the critical path or expires before use.
+  userInput.addEventListener("focus", () => getToken().catch(() => {}), { once: true });
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
