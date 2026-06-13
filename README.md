@@ -7,7 +7,7 @@
 Enter two or more [Letterboxd](https://letterboxd.com) usernames and see the films
 on *everyone's* watchlist — sorted by rating, with genres.
 
-[**watchlistmatch.com →**](https://www.watchlistmatch.com)
+[**watchlistmatch.com →**](https://watchlistmatch.com)
 
 <br />
 

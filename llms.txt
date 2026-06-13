@@ -13,13 +13,13 @@ stores nothing, and is not affiliated with Letterboxd.
 
 ## Links
 
-- [Watchlist Match](https://www.watchlistmatch.com/): open the tool and compare watchlists
+- [Watchlist Match](https://watchlistmatch.com/): open the tool and compare watchlists
 - [Letterboxd](https://letterboxd.com/): the film-logging site whose public watchlists are compared
 
 ## Details
 
-- [How it works](https://www.watchlistmatch.com/): enter usernames, see the shared films sorted by rating
-- [Letterboxd watchlist picker](https://www.watchlistmatch.com/): find a ranked shortlist instead of one random film
+- [How it works](https://watchlistmatch.com/): enter usernames, see the shared films sorted by rating
+- [Letterboxd watchlist picker](https://watchlistmatch.com/): find a ranked shortlist instead of one random film
 - Sorts shared films by Letterboxd member average rating
 - Shows the release year and genres for each matched film
 - Compares up to eight public Letterboxd watchlists
