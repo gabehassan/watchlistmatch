@@ -38,16 +38,17 @@ async function fetchPage(user, page) {
 function parseFilms(html) {
   const tags =
     html.match(/<div class="react-component"[^>]*data-item-slug="[^"]*"[^>]*>/g) || [];
-  return tags.map((tag) => {
+  return tags.flatMap((tag) => {
     const attr = (name) => {
       const m = tag.match(new RegExp(`${name}="([^"]*)"`));
       return m ? decodeEntities(m[1]) : null;
     };
     const slug = attr("data-item-slug");
-    return {
+    if (!slug || !/^[a-z0-9-]+$/.test(slug)) return [];
+    return [{
       slug,
       name: attr("data-item-full-display-name") || attr("data-item-name") || slug,
-    };
+    }];
   });
 }
 
