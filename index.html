@@ -101,8 +101,13 @@
     --violet: #b07cf7;
   }
   * { box-sizing: border-box; margin: 0; }
+  html {
+    background: var(--bg);
+    min-height: 100%;
+  }
   body {
     background: radial-gradient(1100px 520px at 50% -120px, #1a2129, var(--bg)) fixed;
+    background-color: var(--bg);
     color: var(--text);
     font-family: "Avenir Next", Avenir, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     min-height: 100vh;
