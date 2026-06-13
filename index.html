@@ -152,10 +152,6 @@
     70% { transform: scale(1.18); }
     100% { transform: scale(1); }
   }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to { opacity: 1; transform: none; }
-  }
   @keyframes pulse {
     0%, 100% { transform: scale(0.55); opacity: 0.35; }
     50% { transform: scale(1); opacity: 1; }
@@ -197,14 +193,12 @@
   }
 
   h1 {
-    animation: fadeUp 0.6s ease 0.25s backwards;
     font-size: 26px;
     font-weight: 600;
     letter-spacing: -0.5px;
     text-align: center;
   }
   .tagline {
-    animation: fadeUp 0.6s ease 0.35s backwards;
     color: var(--muted);
     font-size: 15px;
     line-height: 1.5;
@@ -214,7 +208,6 @@
   }
 
   form {
-    animation: fadeUp 0.6s ease 0.45s backwards;
     align-items: stretch;
     display: flex;
     gap: 12px;
@@ -243,7 +236,6 @@
   }
   .chip {
     align-items: center;
-    animation: pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     background: var(--panel-2);
     border: 1px solid #36414d;
     border-radius: 999px;
@@ -296,7 +288,6 @@
   button:disabled { opacity: 0.5; cursor: wait; transform: none; }
 
   .hint {
-    animation: fadeUp 0.6s ease 0.55s backwards;
     color: #5c6b7a;
     font-size: 13px;
     margin-top: 12px;
@@ -336,7 +327,6 @@
 
   /* A little strip of film between the form and the results. */
   .strip {
-    animation: fadeUp 0.5s ease backwards;
     background:
       radial-gradient(circle at 9px 50%, var(--bg) 2.6px, transparent 3.4px) 0 0 / 22px 100% repeat-x,
       var(--panel-2);
@@ -348,14 +338,12 @@
   }
 
   .summary {
-    animation: fadeUp 0.5s ease backwards;
     font-size: 22px;
     font-weight: 700;
     text-align: center;
   }
   .summary .n { color: var(--green); }
   .sub {
-    animation: fadeUp 0.5s ease 0.08s backwards;
     color: var(--muted);
     font-size: 14px;
     margin: 6px 0 28px;
@@ -368,8 +356,6 @@
     gap: 12px;
   }
   .film {
-    animation: fadeUp 0.5s ease backwards;
-    animation-delay: var(--d, 0s);
     background: linear-gradient(160deg, var(--panel-2), var(--panel));
     border: 1px solid #2c3641;
     border-radius: 10px;
