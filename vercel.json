@@ -19,6 +19,12 @@
       "permanent": true
     }
   ],
+  "rewrites": [
+    {
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/app.20260613q.js",
