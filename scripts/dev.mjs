@@ -85,6 +85,13 @@ const server = http.createServer(async (req, res) => {
     res.setHeader("Content-Type", types[extname(filePath)] || "application/octet-stream");
     res.end(await readFile(filePath));
   } catch {
+    if (!extname(filePath)) {
+      try {
+        res.setHeader("Content-Type", types[".html"]);
+        res.end(await readFile(filePath + ".html"));
+        return;
+      } catch {}
+    }
     res.statusCode = 404;
     res.end("Not found");
   }

@@ -14,13 +14,16 @@ stores nothing, and is not affiliated with Letterboxd.
 ## Links
 
 - [Watchlist Match](https://watchlistmatch.com/): open the tool and compare watchlists
+- [Watchlist Randomizer](https://watchlistmatch.com/randomizer): pick one random movie from a Letterboxd watchlist
 - [Letterboxd](https://letterboxd.com/): the film-logging site whose public watchlists are compared
 
 ## Details
 
 - [How it works](https://watchlistmatch.com/): enter usernames, see the shared films sorted by rating
 - [Letterboxd watchlist picker](https://watchlistmatch.com/): find a ranked shortlist instead of one random film
+- [Letterboxd watchlist randomizer](https://watchlistmatch.com/randomizer): a slot-machine roll picks one random film from your watchlist, or from a group's shared films
 - Sorts shared films by Letterboxd member average rating
 - Shows the release year and genres for each matched film
 - Compares up to eight public Letterboxd watchlists
 - Only public watchlists can be read; private profiles return an error
+- Built by Gabe Hassan (https://gabehassan.com/)

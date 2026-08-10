@@ -5,7 +5,10 @@
 **Figure out what to watch together.**
 
 Enter two or more [Letterboxd](https://letterboxd.com) usernames and see the films
-on *everyone's* watchlist — sorted by rating, with genres.
+on *everyone's* watchlist — sorted by rating, with genres. A slot-machine roll
+picks one for you automatically, and the
+[watchlist randomizer](https://watchlistmatch.com/randomizer) does the same for
+a single watchlist.
 
 [**watchlistmatch.com →**](https://watchlistmatch.com)
 

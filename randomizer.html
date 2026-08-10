@@ -4,56 +4,54 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="preconnect" href="https://challenges.cloudflare.com" crossorigin />
-<title>Letterboxd Watchlist Match: Picker, Compare & Blend</title>
-<meta name="description" content="Free Letterboxd watchlist picker and compare tool. Find the shared films on every watchlist sorted by rating, or get a random pick from a single watchlist." />
+<title>Letterboxd Watchlist Randomizer: Pick a Random Movie</title>
+<meta name="description" content="Free Letterboxd watchlist randomizer. Enter your username to pick one random movie from your watchlist, then spin again until something clicks. Works for groups too." />
 <meta name="author" content="Gabe Hassan" />
-<link rel="canonical" href="https://watchlistmatch.com/" />
+<link rel="canonical" href="https://watchlistmatch.com/randomizer" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2314181c'/%3E%3Cg style='isolation:isolate'%3E%3Ccircle cx='20' cy='32' r='13' fill='%23ff5c8a' style='mix-blend-mode:screen'/%3E%3Ccircle cx='32' cy='32' r='13' fill='%23b07cf7' style='mix-blend-mode:screen'/%3E%3Ccircle cx='44' cy='32' r='13' fill='%234f9cf9' style='mix-blend-mode:screen'/%3E%3C/g%3E%3C/svg%3E" />
 <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <meta name="theme-color" content="#14181c" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="Watchlist Match" />
-<meta property="og:title" content="Letterboxd Watchlist Match: Picker, Compare & Blend" />
-<meta property="og:description" content="Compare Letterboxd watchlists, find the overlap, and pick what to watch together from the highest-rated shared films." />
-<meta property="og:url" content="https://watchlistmatch.com/" />
+<meta name="apple-mobile-web-app-title" content="Watchlist Randomizer" />
+<meta property="og:title" content="Letterboxd Watchlist Randomizer: Pick a Random Movie" />
+<meta property="og:description" content="Enter your Letterboxd username and get one random film from your watchlist. Spin again until something clicks. Works for groups too." />
+<meta property="og:url" content="https://watchlistmatch.com/randomizer" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="Letterboxd Watchlist Match" />
 <meta property="og:image" content="https://watchlistmatch.com/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="Letterboxd Watchlist Match, find the films on everyone's Letterboxd watchlist" />
+<meta property="og:image:alt" content="Letterboxd Watchlist Randomizer, pick a random movie from your Letterboxd watchlist" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Letterboxd Watchlist Match: Picker, Compare & Blend" />
-<meta name="twitter:description" content="Find the films on everyone's Letterboxd watchlist, sorted by rating." />
+<meta name="twitter:title" content="Letterboxd Watchlist Randomizer: Pick a Random Movie" />
+<meta name="twitter:description" content="One random film from your Letterboxd watchlist. Spin again until something clicks." />
 <meta name="twitter:image" content="https://watchlistmatch.com/og.png" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  "name": "Letterboxd Watchlist Match",
+  "name": "Letterboxd Watchlist Randomizer",
   "alternateName": [
-    "Watchlist Match",
-    "Letterboxd Watchlist Picker",
-    "Letterboxd Watchlist Compare",
-    "Letterboxd Watchlist Blend",
-    "Movie Night Picker"
+    "Watchlist Randomizer",
+    "Letterboxd Randomizer",
+    "Random Movie Picker",
+    "Watchlist Shuffle",
+    "Letterboxd Roulette"
   ],
-  "url": "https://watchlistmatch.com/",
+  "url": "https://watchlistmatch.com/randomizer",
   "applicationCategory": "EntertainmentApplication",
   "operatingSystem": "Any",
   "isAccessibleForFree": true,
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
   "featureList": [
-    "Compare two or more public Letterboxd watchlists",
-    "Find films that appear on every watchlist",
-    "Sort shared films by Letterboxd average rating",
-    "Show release year and genres for each match",
-    "Pick one random film from the shared watchlist",
-    "Pick one random film from a single username's watchlist"
+    "Pick one random movie from a public Letterboxd watchlist",
+    "Spin again for a new random film instantly",
+    "Show the Letterboxd average rating and genres for each pick",
+    "Group mode: pick a random film from the overlap of up to eight watchlists"
   ],
-  "description": "A free Letterboxd watchlist picker and compare tool for movie night. Enter two or more usernames to find the shared films on every public watchlist, sorted by Letterboxd average rating.",
+  "description": "A free Letterboxd watchlist randomizer. Enter your username to pick one random movie from your public watchlist, with its Letterboxd rating and genres. Add friends' usernames to pick from the films on everyone's watchlist.",
   "author": {
     "@type": "Person",
     "name": "Gabe Hassan",
@@ -64,10 +62,11 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Letterboxd Watchlist Match",
-  "url": "https://watchlistmatch.com/",
-  "alternateName": ["Watchlist Match", "Letterboxd Watchlist Picker", "Letterboxd Watchlist Compare", "Letterboxd Watchlist Blend"]
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Watchlist Match", "item": "https://watchlistmatch.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Watchlist Randomizer", "item": "https://watchlistmatch.com/randomizer" }
+  ]
 }
 </script>
 <script type="application/ld+json">
@@ -77,58 +76,50 @@
   "mainEntity": [
     {
       "@type": "Question",
-      "name": "What is a Letterboxd watchlist blend?",
+      "name": "How do I pick a random movie from my Letterboxd watchlist?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A watchlist blend compares two or more Letterboxd watchlists and keeps only the overlap, the films that appear on every list. Those are the movies you genuinely all want to watch. No more scrolling through hundreds of posters trying to find common ground."
+        "text": "Enter your Letterboxd username, @handle, or profile link and press Pick a film. The randomizer reads your public watchlist, spins a slot-machine reel over your films, and lands on one at random, with its Letterboxd average rating and genres. Not feeling it? Press Spin again until something clicks."
       }
     },
     {
       "@type": "Question",
-      "name": "How do I compare two Letterboxd watchlists?",
+      "name": "What is a Letterboxd watchlist randomizer?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Enter two Letterboxd usernames or profile links, lock in each name with comma or enter, then submit. Watchlist Match reads the public watchlists and shows the films that appear on both lists."
+        "text": "A watchlist randomizer, also called a watchlist shuffle or movie roulette, picks one random film from your Letterboxd watchlist. It solves the paradox of choice: you saved hundreds of films you want to watch, and a random pick beats twenty minutes of scrolling."
       }
     },
     {
       "@type": "Question",
-      "name": "How do we decide what to watch together?",
+      "name": "Can it pick a random movie for a group?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "Movie night, date night, or a long-distance watch party: if you both use Letterboxd, your watchlists already hold the answer. Compare them here and the highest-rated films you share rise to the top, so deciding what to watch tonight takes about five seconds."
+        "text": "Yes. Add up to eight public Letterboxd usernames and the randomizer picks from only the films that appear on every watchlist, so the result is always something everyone wants to watch."
       }
     },
     {
       "@type": "Question",
-      "name": "How is this different from a watchlist picker?",
+      "name": "What if I'd rather see the whole list than one random pick?",
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": "A watchlist picker pulls one random film from your lists. Watchlist Match shows the full overlap, sorted by Letterboxd average rating, so the best-loved films float to the top and you choose together. If you would rather leave it to chance, the watchlist randomizer at watchlistmatch.com/randomizer picks one random film for you."
+        "text": "Use the Watchlist Match compare tool at watchlistmatch.com. It shows the full overlap of two or more watchlists sorted by Letterboxd average rating, so the best-loved shared films float to the top."
       }
     },
     {
       "@type": "Question",
-      "name": "Can it pick a random movie from my watchlist?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes, the randomizer always runs. Add a single username and the slot-machine roll picks one random film from that watchlist; add several and it draws from the films you all share, with a Spin again button for rerolls. The dedicated Letterboxd watchlist randomizer at watchlistmatch.com/randomizer does the same thing."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Can I compare more than two Letterboxd users?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "Yes. Add up to eight public Letterboxd usernames and Watchlist Match will show the films that appear on every watchlist, which is useful for group movie nights."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "Does it work with private watchlists?",
+      "name": "Does the randomizer work with private watchlists?",
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "No, only public Letterboxd watchlists can be read. Profiles set to private will show an error. Nothing is stored: your usernames stay in your browser."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is the watchlist randomizer free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. It is free, there is no login, and nothing is stored. It works with usernames, @handles, or profile links, and it is not affiliated with Letterboxd."
       }
     }
   ]
@@ -539,93 +530,75 @@
   }
 </style>
 </head>
-<body>
+<body data-page="randomizer">
 <main class="wrap">
   <div class="logo"><span></span><span></span><span></span></div>
-  <h1>Letterboxd Watchlist Match</h1>
+  <h1>Letterboxd Watchlist Randomizer</h1>
   <p class="tagline">
-    A free Letterboxd watchlist picker and compare tool. Add one username for
-    a random pick from your watchlist, or two or more to find the films on
-    everyone's list, sorted by average rating.
+    Can't decide what to watch? Enter your Letterboxd username and let the
+    slot machine pick one random movie from your watchlist, rating and
+    genres included.
   </p>
 
   <form id="form">
     <div class="chipbox" id="chipbox">
       <input type="text" id="userInput" aria-label="Letterboxd usernames"
-        placeholder="add usernames…" autocomplete="off" autocapitalize="none"
+        placeholder="add your username…" autocomplete="off" autocapitalize="none"
         autocorrect="off" spellcheck="false" enterkeyhint="go" maxlength="512" />
     </div>
-    <button type="submit" id="go">Submit</button>
+    <button type="submit" id="go">Pick a film</button>
   </form>
-  <p class="hint">Press comma or enter to lock in each name, profile links work too. One name alone gets a random pick.</p>
+  <p class="hint">Usernames, @handles, or profile links work. Add friends' names to pick from the films you all share.</p>
   <div class="turnstile" id="turnstile-widget"></div>
 
   <p class="status" id="status" role="status"></p>
   <div id="results"></div>
 
   <section class="about">
-    <h2>Letterboxd watchlist picker for movie night</h2>
+    <h2>How do I pick a random movie from my Letterboxd watchlist?</h2>
     <p>
-      Watchlist Match is built for the moment when everyone wants to watch
-      something, but nobody wants to scroll through hundreds of films. Add two
-      or more Letterboxd usernames and it becomes a shared watchlist picker:
-      only the films that appear on every public watchlist are shown.
+      Enter your Letterboxd username, @handle, or profile link and press
+      <em>Pick a film</em>. The randomizer reads your public watchlist, spins
+      a slot-machine reel over your films, and lands on one at random, with
+      its Letterboxd average rating and genres. Not feeling it? Press
+      <em>Spin again</em> until something clicks.
     </p>
-    <h2>What is a Letterboxd watchlist blend?</h2>
+    <h2>What is a Letterboxd watchlist randomizer?</h2>
     <p>
-      A watchlist blend compares two or more Letterboxd watchlists and keeps
-      only the overlap, the films that appear on every list. Those are the
-      movies you genuinely all want to watch. No more scrolling through
-      hundreds of posters trying to find common ground.
+      A watchlist randomizer, also called a watchlist shuffle or movie roulette,
+      picks one random film from your Letterboxd watchlist. It solves the
+      paradox of choice: you saved hundreds of films you want to watch, and a
+      random pick beats twenty minutes of scrolling through posters trying to
+      decide what to watch tonight.
     </p>
-    <h2>How do I compare Letterboxd watchlists?</h2>
+    <h2>Can it pick a random movie for a group?</h2>
     <p>
-      Enter usernames, @handles, or Letterboxd profile links, then submit.
-      Watchlist Match reads each public watchlist, finds the intersection, and
-      ranks the shared films by Letterboxd average rating with genres shown
-      underneath. It works for couples, roommates, friend groups, and watch
-      parties.
+      Yes. Add up to eight public Letterboxd usernames and the randomizer picks
+      from only the films that appear on every watchlist, so the result is
+      always something everyone genuinely wants to watch. Perfect for movie
+      night when nobody will make the call.
     </p>
-    <h2>Can I compare more than two Letterboxd users?</h2>
+    <h2>What if I'd rather see the whole list than one random pick?</h2>
     <p>
-      Yes. Add up to eight public Letterboxd usernames and Watchlist Match will
-      show the films that appear on every watchlist, which is useful for group
-      movie nights and watch parties.
+      Use the <a href="/">Watchlist Match compare tool</a>. It shows the full
+      overlap of two or more Letterboxd watchlists sorted by average rating, so
+      the best-loved shared films float to the top and you choose together.
     </p>
-    <h2>How do we decide what to watch together?</h2>
-    <p>
-      Movie night, date night, or a long-distance watch party: if you both use
-      Letterboxd, your watchlists already hold the answer. Compare them here
-      and the highest-rated films you share rise to the top, so deciding what
-      to watch tonight takes about five seconds.
-    </p>
-    <h2>How is this different from a watchlist picker?</h2>
-    <p>
-      A watchlist picker pulls one random film from your lists. Watchlist Match
-      shows the full overlap first, sorted by Letterboxd average rating, so the
-      best-loved films float to the top and you choose together. It is a
-      practical alternative when you want a ranked shortlist instead of one
-      random result.
-    </p>
-    <h2>Can it pick a random movie from my watchlist?</h2>
-    <p>
-      Yes, the randomizer always runs. Add a single username and the
-      slot-machine roll picks one random film from that watchlist; add
-      several and it draws from the films you all share, with a
-      <em>Spin again</em> button for rerolls. The dedicated
-      <a href="/randomizer">Letterboxd watchlist randomizer</a> page does the
-      same thing.
-    </p>
-    <h2>Does it work with private watchlists?</h2>
+    <h2>Does the randomizer work with private watchlists?</h2>
     <p>
       No, only public Letterboxd watchlists can be read. Profiles set to
       private will show an error. Nothing is stored: your usernames stay in
       your browser.
     </p>
+    <h2>Is the watchlist randomizer free?</h2>
+    <p>
+      Yes. It is free, there is no login, and nothing is stored. It is not
+      affiliated with Letterboxd; ratings are Letterboxd member averages.
+    </p>
   </section>
 
   <p class="footer">
-    <a href="/randomizer">Watchlist Randomizer</a> · Built by <a href="https://gabehassan.com/" target="_blank" rel="noopener">Gabe Hassan</a><br />
+    <a href="/">Compare watchlists</a> · Built by <a href="https://gabehassan.com/" target="_blank" rel="noopener">Gabe Hassan</a><br />
     Not affiliated with Letterboxd · ratings are Letterboxd member averages
   </p>
 </main>
